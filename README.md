@@ -2,7 +2,7 @@
 Task related to this https://bitbucket.org/cleverassets/crossroad-task/src/master/
 
 # Start application
-clone repository and run main method, application will start simulate cross road with cross lights\
+clone repository and run main method, application will start simulate cross road with cross lights.
 
 # Description
 Firstly we initialize all necessary objects which is done inside initializeCrossLights() method.
