@@ -19,6 +19,11 @@ public class CrossRoadService {
     private CrossLight crossLightEast;
     private CrossLight crossLightWest;
 
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String ORANGE = "\u001B[33m";
+    public static final String RESET = "\u001B[0m";
+
 
     /**
      * startCrossRoadProcess main method that is being executed
@@ -40,13 +45,13 @@ public class CrossRoadService {
                     carsList.forEach(c -> {
                         if (areNorthSouthCrossLightsGreen()) {
                             if (c.getCrossLight().name().equals(CrossLightEnum.NORTH.name()) || c.getCrossLight().name().equals(CrossLightEnum.SOUTH.name())) {
-                                System.out.printf("Car %s is releasing %s traffic light %n", c.getId(), c.getCrossLight());
+                                System.out.printf("%sCar %s is releasing %s traffic light %s%n", GREEN, c.getId(), c.getCrossLight(), RESET);
                                 carsToRemove.add(c);
                                 nextCarIsWaiting();
                             }
                         } else {
                             if (c.getCrossLight().name().equals(CrossLightEnum.EAST.name()) || c.getCrossLight().name().equals(CrossLightEnum.WEST.name())) {
-                                System.out.printf("Car %s is releasing from previously %s traffic lights %n", c.getId(), c.getCrossLight());
+                                System.out.printf("%sCar %s is releasing from previously %s traffic lights %s%n", GREEN, c.getId(), c.getCrossLight(), RESET);
                                 carsToRemove.add(c);
                                 nextCarIsWaiting();
                             }
@@ -64,9 +69,9 @@ public class CrossRoadService {
                                     CrossLightEnum.NORTH.name(),
                                     CrossLightEnum.SOUTH.name(),
                                     LightColourEnum.GREEN.name());
-                            System.out.printf("Car %s is passing through cross road %n", car.getId());
+                            System.out.printf("%sCar %s is passing through cross road %s%n", GREEN, car.getId(), RESET);
                         } else {
-                            System.out.printf("Saving car %s to list, cause cross lights are %s%n", car.getId(), LightColourEnum.RED.name());
+                            System.out.printf("%sSaving car %s to list, cause cross lights are %s%s%n", RED, car.getId(), LightColourEnum.RED.name(), RESET);
                             carsList.add(car);
                         }
                     }
@@ -77,9 +82,9 @@ public class CrossRoadService {
                                     CrossLightEnum.EAST.name(),
                                     CrossLightEnum.WEST.name(),
                                     LightColourEnum.GREEN.name());
-                            System.out.printf("Car %s is passing through cross road %n", car.getId());
+                            System.out.printf("%sCar %s is passing through cross road %s%n", GREEN, car.getId(), RESET);
                         } else {
-                            System.out.printf("Saving car %s to list, cause cross lights are %s%n", car.getId(), LightColourEnum.RED.name());
+                            System.out.printf("%sSaving car %s to list, cause cross lights are %s%s%n", RED, car.getId(), LightColourEnum.RED.name(), RESET);
                             carsList.add(car);
                         }
 
@@ -97,6 +102,18 @@ public class CrossRoadService {
 
         timer.scheduleAtFixedRate(mainTask, 0, 1000);
         timer.scheduleAtFixedRate(crossLightsTimer, 3000, 5000);
+        stopApplication(timer);
+    }
+
+    private void stopApplication(Timer timer){
+        try {
+            var time = 30000;
+            Thread.sleep(time);
+            timer.cancel();
+            System.out.printf("%s******Application is about to stop after %s seconds of running ******%s", GREEN, time, RESET);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -115,7 +132,7 @@ public class CrossRoadService {
      * initializeCrossLight method used for initialize cross lights objects with default starting values
      */
     private void initializeCrossLights() {
-        System.out.println("**Setting initial cross light state**");
+        System.out.printf("%s**Setting initial cross light state**%s%n", ORANGE, RESET);
         crossLightNorth = new CrossLight(CrossLightEnum.NORTH, LightColourEnum.GREEN);
         crossLightSouth = new CrossLight(CrossLightEnum.SOUTH, LightColourEnum.GREEN);
         crossLightEast = new CrossLight(CrossLightEnum.EAST, LightColourEnum.RED);
@@ -127,7 +144,7 @@ public class CrossRoadService {
      *  changeCrossLightColour method used for changing cross lights colour from red to green and opposite
      */
     private void changeCrossLightColour() {
-        System.out.println("**Changing cross lights colour**");
+        System.out.printf("%s**Changing cross lights colour**%s%n", ORANGE, RESET);
         if (crossLightNorth.getLightColour().equals(LightColourEnum.GREEN)) {
             crossLightNorth.setLightColour(LightColourEnum.RED);
             crossLightSouth.setLightColour(LightColourEnum.RED);
